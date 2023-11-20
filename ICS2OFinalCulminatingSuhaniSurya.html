@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ICS2O Culminating</title>
+    <!-- Title: ICS2O Culminating Assignment by: Suhani Surya
+    Project Description: This scene was created by Suhani Surya. The multiple animations work together to create a wonderful outer space scene. One can see bright stars, colourful  planets, floating spaceships, fast and fun shooting stars, a bouncing astronaut and even an astronaut having their iconic Neil Armstrong moment with a flag. User interaction is displayed by 2 actions: a click and a double click of the mouse. Clicking once will change the colour of the ground. Clicking twice will allow the user to change the colour of the floating astronaut. Users are sure to have fun with this program!
+    Date: June 24th, 2022
+    Name: Space Adventures
+    Overview of Features and Interactions: Clicking the mouse once will change the colour of the ground. Clicking the mouse twice will result in a prompt alert popping up to change the colour of the floating astronaut. There are 4 animated objects: a planet, shooting stars, a rocket ship and an astronaut.-->
+</head>
+<canvas id="canvas1" width="640" height="480" style="border:1px; position:absolute; Left:0; top:0; z-index:0";></canvas>
+<!-- this canvas will have the background gradient, stars, sun, ground, flag and astronaut holding the flag -->
+<canvas id="canvas2" width="640" height="480" style="border:1px; position:absolute; Left:0; top:0; z-index:1";></canvas>
+<!--  this canvas will have the shooting stars-->
+<canvas id="canvas3" width="640" height="480" style="border:1px; position:absolute; Left:0; top:0; z-index:2";></canvas>
+<!--  this canvas will house the rocket -->
+<canvas id="canvas4" width="640" height="480" style="border:1px; position:absolute; Left:0; top:0; z-index:3";></canvas>
+<!--  this canvas will have the planet-->
+<canvas id="canvas5" width="640" height="480" style="border:1px; position:absolute; Left:0; top:0; z-index:4";></canvas>
+<!--  this canvas will have the astronaut -->
+<canvas id="canvas6" width="640" height="480" style="border:1px; position:absolute; Left:0; top:0; z-index:5";></canvas>
+<!--  this canvas will have the text -->
+<body>
+<script>
+var numOfStars = Number(prompt("How many stars do you want?"));
+//this variable asks the user for how many stars they would like to appear on the screen through the prompt method.
+var astroColor = prompt("What colour do you want your first astronaut to be? Choose from: Blue, Cyan, SeaGreen, Salmon, Grey, Pink, Green, Yellow, and SlateGrey");
+var astroColor2 = prompt("What colour do you want your second astronaut to be? Choose from: Blue, Cyan, SeaGreen, Salmon, Grey, Pink, Green, Yellow, and SlateGrey");
+
+//these variable asks the user for the colour they want the astronaut to be. These colour choices have been chosen for the reason that the html and javascript language recognizes them with the "light" infront of them. This serves the purpose of having color shades that are lighter to differentiate all of the details of the astronaut.
+var astroName = prompt("What is your name?");
+//this variable asks the name of the user.
+var astroPlanetName = astroName + "'s Planet";
+//this variable concatenates with users name with the ending so that it can appear to say "user's name's planet".
+
+//setting up the 5 layers in the canvas
+//background layer
+var layer1 = document.getElementById("canvas1");
+//this layer will have the background gradient, stars, sun, ground, flag and astronaut holding the flag
+var layer2 = document.getElementById("canvas2");
+//this layer will have the shooting stars
+var layer3 = document.getElementById("canvas3");
+//this layer will house the rocket
+var layer4 = document.getElementById("canvas4");
+//this layer will have the planet
+var layer5 = document.getElementById("canvas5");
+//this layer will have the astronaut
+var layer6 = document.getElementById("canvas6");
+//this canvas will have the text
+
+//getting the context of these 5 layers for the 2d surface
+
+var dt1 = layer1.getContext("2d");
+var dt2 = layer2.getContext("2d");
+var dt3 = layer3.getContext("2d");
+var dt4 = layer4.getContext("2d");
+var dt5 = layer5.getContext("2d");
+var dt6 = layer6.getContext("2d");
+
+var newColour = randomColour();
+
+//BEGINNING OF CANVAS 1
+//blue gradient background
+
+//setting up the variable that houses the gradient
+        var radGrd = dt1.createRadialGradient(320, 240, 10, 320, 240, 300);
+        //establishing the three collours of the gradient
+        radGrd.addColorStop(1, "rgb(3, 8, 41)");
+        radGrd.addColorStop(0.5, "rgb(6, 7, 94)");
+        radGrd.addColorStop(0, "rgb(32, 29, 181)");
+        //setting the fillStyle as the gradient
+        dt1.fillStyle = radGrd;
+        dt1.beginPath();
+        //crating the arc that will display the gradient as the background
+        dt1.arc(320, 240, 500, 0, 2 * Math.PI);
+        dt1.fill();
+
+
+        //the main function that randomly generates rgb values to create random colours
+        function randomColour()
+        {
+        var red = Math.floor(Math.random() * 255) + 1;
+        var green = Math.floor(Math.random() * 255) + 1;
+        var blue = Math.floor(Math.random() * 255) + 1;
+        //concatenating the rgb values into the proper format to be used where necessary
+        return "rgb(" + red + "," + green + "," + blue + ")";
+        }
+
+        //randomly generating an initial x and y position
+        var starX = Math.floor(Math.random() * 640) + 1;
+        var starY = Math.floor(Math.random() * 400) + 1;
+        //randomly generating a radious between 0 and 2, adding 0.5 so that the stars are not too big
+        var starRadius = (Math.random() * 2) + 0.5;
+
+        function stars()
+        {
+                //setting the fillStyle of the stars as white
+                dt1.fillStyle = "white";
+                dt1.beginPath();
+                //randomly placing stars at x and y positions, along with their generated radious size
+                dt1.arc(starX, starY, starRadius, 0, 2 * Math.PI);
+                dt1.stroke();
+                dt1.fill()
+
+                //regenerating the x, y and radius values for the next star
+                starX = Math.floor(Math.random() * 640) + 1;
+                starY = Math.floor(Math.random() * 480) + 1;
+                starRadius = Math.floor(Math.random() * 3) + 1;
+        }
+        //setting up a counter variable
+        var i = 1;
+        //using a while loop because the number of stars depends on the user's input
+        while(i <= numOfStars)
+        {
+                stars();
+                i++;
+        }
+
+
+        //creating the bottom ground layer
+
+//setting the fillStyle as a random colour first, so it does not appear black the first time
+        dt1.fillStyle = randomColour();
+        dt1.beginPath();
+        //placing the circle's y position outside of the canvas to display the cut off round ground
+        dt1.arc(320, 1100, 700, 0, 2 * Math.PI);
+        dt1.fill();
+        //initializing the event listener that is on the lookout for a click from the mouse, and will run the ground function
+        document.addEventListener("click", ground)
+        function ground()
+        {
+        //setting the fillStyle as a random colour
+        dt1.fillStyle = randomColour();
+        dt1.beginPath();
+        dt1.arc(320, 1100, 700, 0, 2 * Math.PI);
+        dt1.fill();
+        }
+
+        //sun
+        //establishing a variable for the sun's gradient
+        var sunGrd = dt1.createRadialGradient(540, 100, 40, 540, 100, 100);
+        //adding the three colours
+        sunGrd.addColorStop(1, "salmon");
+        sunGrd.addColorStop(0.5, "orange");
+        sunGrd.addColorStop(0, "yellow");
+
+        //setting the fillStyle of the arc as the variable housing the radial gradient
+        dt1.fillStyle = sunGrd;
+        dt1.arc(540, 100, 100, 0, 2 * Math.PI);
+        dt1.fill();
+
+//this astronaut will be the one holding the flag
+        astronaut2(280, 280)
+function astronaut2(astro2X, astro2Y)
+        {
+            //jetpack
+            dt1.fillStyle = astroColor2;
+            dt1.fillRect(astro2X - 40, astro2Y, 80, 75);
+
+            //helmet base
+            dt1.fillStyle = "light" + astroColor2;
+            dt1.beginPath()
+            dt1.arc(astro2X, astro2Y, 30, 0, 2 * Math.PI);
+            dt1.fill();
+
+            //jetpack buttons
+            //button 1
+            dt1.beginPath();
+            dt1.fillStyle = "black";
+            dt1.arc(astro2X - 34, astro2Y + 10, 2, 0, 2 * Math.PI);
+            dt1.fill();
+            //button 2
+            dt1.beginPath();
+            dt1.fillStyle = "black";
+            dt1.arc(astro2X + 34, astro2Y + 10, 2, 0, 2 * Math.PI);
+            dt1.fill();
+            //button 3
+            dt1.beginPath();
+            dt1.fillStyle = "black";
+            dt1.arc(astro2X - 34, astro2Y + 70, 2, 0, 2 * Math.PI);
+            dt1.fill();
+            //button 4
+            dt1.beginPath();
+            dt1.fillStyle = "black";
+            dt1.arc(astro2X + 34, astro2Y + 70, 2, 0, 2 * Math.PI);
+            dt1.fill();
+
+            //helmet glass
+            dt1.fillStyle = "black";
+            dt1.beginPath()
+            dt1.arc(astro2X, astro2Y, 25, 0, 2 * Math.PI);
+            dt1.fill();
+
+            //body of astronaut
+            dt1.beginPath();
+            dt1.fillStyle = "light" + astroColor2;
+            dt1.fillRect(astro2X - 20, astro2Y + 30, 40, 50);
+
+            //neckpiece
+            dt1.beginPath();
+            dt1.fillStyle = "black";
+            dt1.moveTo(astro2X - 10, astro2Y + 32);
+            dt1.bezierCurveTo(astro2X - 20, astro2Y + 40, astro2X + 20, astro2Y + 40, astro2X + 10, astro2Y + 32);
+            dt1.fill();
+
+            //left arm
+            dt1.beginPath();
+            dt1.lineWidth = 10;
+            dt1.lineCap = "round";
+            dt1.strokeStyle = "light" + astroColor2;
+            dt1.moveTo(astro2X - 25, astro2Y + 40);
+            dt1.quadraticCurveTo(astro2X - 45, astro2Y + 40, astro2X - 40, astro2Y + 70);
+            dt1.stroke();
+
+            //right arm
+            dt1.beginPath();
+            dt1.lineWidth = 10;
+            dt1.lineCap = "round";
+            dt1.strokeStyle = "light" + astroColor2;
+            dt1.moveTo(astro2X + 25, astro2Y + 40);
+            dt1.quadraticCurveTo(astro2X + 45, astro2Y + 40, astro2X + 40, astro2Y + 70);
+            dt1.stroke();
+
+            //left shoulderpiece
+            dt1.beginPath();
+            dt1.fillStyle = "black";
+            dt1.moveTo(astro2X - 20, astro2Y + 30);
+            dt1.lineTo(astro2X - 20, astro2Y + 50);
+            dt1.lineTo(astro2X - 30, astro2Y + 30);
+            dt1.closePath();
+            dt1.fill();
+
+            //right shoulderpiece
+            dt1.beginPath();
+            dt1.moveTo(astro2X + 20, astro2Y + 30);
+            dt1.lineTo(astro2X + 20, astro2Y + 50);
+            dt1.lineTo(astro2X + 30, astro2Y + 30);
+            dt1.closePath();
+            dt1.fill();
+
+            //left leg
+            dt1.beginPath();
+            dt1.strokeStyle = "light" + astroColor2;
+            dt1.lineWidth = 15;
+            dt1.moveTo(astro2X - 10, astro2Y + 80);
+            dt1.lineTo(astro2X - 20, astro2Y + 110);
+            dt1.stroke();
+
+            //right leg
+            dt1.beginPath();
+            dt1.strokeStyle = "light" + astroColor2;
+            dt1.lineWidth = 15;
+            dt1.lineJoin = "round";
+            dt1.moveTo(astro2X + 10, astro2Y + 80);
+            dt1.lineTo(astro2X + 20, astro2Y + 110);
+            dt1.stroke();
+
+            //left moonboot
+            dt1.beginPath();
+            dt1.strokeStyle = astroColor2;
+            dt1.moveTo(astro2X - 20, astro2Y + 110);
+            dt1.lineTo(astro2X - 15, astro2Y + 115);
+            dt1.stroke();
+
+            //right moonboot
+            dt1.beginPath();
+            dt1.strokeStyle = astroColor2;
+            dt1.moveTo(astro2X + 20, astro2Y + 110);
+            dt1.lineTo(astro2X + 25, astro2Y + 115);
+            dt1.stroke();
+
+            //monitor on body of astronaut
+            dt1.beginPath();
+            dt1.fillStyle = "black";
+            dt1.fillRect(astro2X - 15, astro2Y + 40,30, 20);
+            dt1.fill();
+    }
+                //flagpole
+        flagpole(320, 250)
+        function flagpole(flagpoleX, flagpoleY)
+        {
+               //flag
+               dt1.fillStyle = "purple";
+               dt1.beginPath();
+               dt1.moveTo(flagpoleX, flagpoleY);
+               dt1.lineTo(flagpoleX + 100, flagpoleY);
+               dt1.lineTo(flagpoleX + 80, flagpoleY + 25);
+               dt1.lineTo(flagpoleX + 100, flagpoleY + 50);
+               dt1.lineTo(flagpoleX, flagpoleY + 50);
+               dt1.closePath();
+               dt1.fill();
+
+               //flagpole
+               dt1.strokeStyle = "white";
+               dt1.lineWidth = 5;
+               dt1.beginPath();
+               dt1.moveTo(flagpoleX, flagpoleY);
+               dt1.lineTo(flagpoleX, flagpoleY + 150);
+               dt1.stroke();
+        }
+
+//END OF CANVAS 1, BEGINNING OF CANVAS 2
+//**************************************
+
+        //this is the shooting star that will be going towards the left of the canvas
+        //these variables are assigning the x, y and speed values to the star
+        var shootingStarTLX = 600;
+        var shootingStarTLY = 100;
+        var shootingStarTLSpeed = 20;
+
+        setInterval(shootingStarToLeft, 30)
+        function shootingStarToLeft()
+        {
+            //clearing the rectangle for a clean animation
+            dt2.clearRect(0, 0, canvas2.width, canvas2.height);
+            dt2.strokeStyle = "white";
+            dt2.fillStyle = "white";
+            dt2.lineWidth = 3;
+            dt2.beginPath();
+            //drawing the star
+            dt2.moveTo(shootingStarTLX, shootingStarTLY);
+            dt2.quadraticCurveTo(shootingStarTLX - 10, shootingStarTLY + 30, shootingStarTLX + 20, shootingStarTLY + 30);
+            dt2.quadraticCurveTo(shootingStarTLX - 10, shootingStarTLY + 30, shootingStarTLX, shootingStarTLY + 60);
+            dt2.quadraticCurveTo(shootingStarTLX - 10, shootingStarTLY + 30, shootingStarTLX - 30, shootingStarTLY + 30);
+            dt2.quadraticCurveTo(shootingStarTLX - 10, shootingStarTLY + 30, shootingStarTLX, shootingStarTLY);
+            dt2.stroke();
+            dt2.fill();
+
+            //drawing tail of the star (shadow)
+            dt2.fillStyle = "rgb(186, 172, 232, 0.5)";
+            dt2.beginPath();
+            dt2.moveTo(shootingStarTLX - 10, shootingStarTLY + 55);
+            dt2.lineTo(shootingStarTLX + 100, shootingStarTLY + 100);
+            dt2.lineTo(shootingStarTLX, shootingStarTLY);
+            dt2.fill();
+
+            //making sure that the star is going towards the left of the screen by substracting the speed
+            shootingStarTLX = shootingStarTLX - shootingStarTLSpeed;
+            shootingStarTLY = shootingStarTLY - shootingStarTLSpeed;
+
+            //if the star hits any of the edges of the screen, its position will reset one on the screen and the animation will start over
+            if (shootingStarTLX < 0|| shootingStarTLX > 640 || shootingStarTLY < 0 || shootingStarTLY > 480)
+            {
+                shootingStarTLX = Math.floor(Math.random() * 600) + 1;
+                shootingStarTLY = Math.floor(Math.random() * 300) + 1;
+            }
+        }
+
+//END OF CANVAS 2, BEGINNING OF CANVAS 3
+//**************************************
+
+        //this is the ringed planet that will be moving across the screen
+        //these variables set the x, y and speed of the planet
+        var rPlanetX = 0;
+        var rPlanetY = 170;
+        var speed2 = 1;
+
+        setInterval(ringedPlanet, 80)
+        //setInterval repeats the animation every 80 milliseconds
+        function ringedPlanet()
+        {
+                //clearing the rectangle so that the animation is clear
+                dt3.clearRect(0, 0, canvas3.width, canvas3.height);
+                //circular part of the planet
+                dt3.fillStyle = newColour;
+                dt3.beginPath();
+                dt3.arc(rPlanetX, rPlanetY, 45, 0, 2 * Math.PI);
+                dt3.fill();
+
+                //little spots on the planet
+                dt3.fillStyle = "grey";
+                dt3.beginPath();
+                dt3.arc(rPlanetX - 10, rPlanetY + 10, 10, 0, 2 * Math.PI);
+                dt3.fill();
+
+                dt3.beginPath();
+                dt3.arc(rPlanetX + 10, rPlanetY + 20, 5, 0, 2 * Math.PI);
+                dt3.fill();
+
+                dt3.beginPath();
+                dt3.arc(rPlanetX - 20, rPlanetY - 15, 2, 0, 2 * Math.PI);
+                dt3.fill();
+
+                dt3.beginPath();
+                dt3.arc(rPlanetX + 20, rPlanetY + 8, 2, 0, 2 * Math.PI);
+                dt3.fill();
+
+                dt3.beginPath();
+                dt3.arc(rPlanetX - 20, rPlanetY - 30, 7, 0, 2 * Math.PI);
+                dt3.fill();
+
+                dt3.beginPath();
+                dt3.arc(rPlanetX + 20, rPlanetY - 10, 5, 0, 2 * Math.PI);
+                dt3.fill();
+
+                dt3.beginPath();
+                dt3.arc(rPlanetX, rPlanetY + 40, 5, 0, 2 * Math.PI);
+                dt3.fill();
+
+                //ring around the planet
+                dt3.strokeStyle = "white";
+                dt3.lineCap = "round";
+                dt3.lineWidth = 7
+                dt3.beginPath();
+                dt3.moveTo(rPlanetX - 47, rPlanetY);
+                dt3.bezierCurveTo(rPlanetX - 90, rPlanetY + 30, rPlanetX + 90, rPlanetY + 30, rPlanetX + 47, rPlanetY)
+                dt3.stroke();
+
+
+                //increasing the speed so the planet moves forward
+                rPlanetX = rPlanetX + speed2;
+
+                //if the planet hits one of the corners, the speed is negative so that it moves the other way and not off the screen
+                if(rPlanetX <= 0 || rPlanetX >= 690)
+                        {
+                                newColour = randomColour();
+                                speed2 = -speed2
+                                rPlanetY = Math.floor(Math.random() * 200) + 1;
+
+                        }
+        }
+//END OF CANVAS 3, BEGINNING OF CANVAS 4
+//**************************************
+
+//this is the rocket canvas
+//these variables have assigned values for the x, y and speed of the rocket
+       var rocketX = 0;
+       var rocketY = 20;
+       var speed1 = 3;
+
+       	setInterval(rocket, 70)
+//setInterval repeats the animation every 70 milliseconds
+       function rocket()
+        {
+           dt4.clearRect(0, 0, canvas4.width, canvas4.height);
+           //flame
+            var radGrd2 = dt4.createRadialGradient (rocketX - 140, rocketY, 10, rocketX - 150, rocketY, 20);
+            radGrd2.addColorStop(0, "yellow");
+            radGrd2.addColorStop(0.5, "orange");
+            radGrd2.addColorStop(1, "red");
+
+            dt4.fillStyle = radGrd2;
+            dt4.beginPath();
+            dt4.arc(rocketX - 150, rocketY, 25, 0, 2 * Math.PI);
+            dt4.fill();
+
+            //body of the rocket
+           dt4.fillStyle = "red";
+           dt4.strokeStyle = "black";
+           dt4.lineWidth = 3;
+           dt4.beginPath();
+            dt4.moveTo(rocketX, rocketY);
+            dt4.quadraticCurveTo(rocketX - 10, rocketY - 40, rocketX - 120, rocketY - 20);
+            dt4.lineTo(rocketX - 120, rocketY + 20)
+
+            dt4.quadraticCurveTo(rocketX - 10, rocketY + 40, rocketX, rocketY);
+            dt4.stroke();
+            dt4.fill();
+            //top part of rocket
+            dt4.lineWidth = 5;
+            dt4.strokeStyle = "black";
+            dt4.moveTo(rocketX - 20, rocketY - 23);
+            dt4.quadraticCurveTo (rocketX - 30, rocketY, rocketX - 20, rocketY + 23);
+            dt4.stroke();
+            //window of the rocket
+            dt4.fillStyle = "cyan";
+            dt4.beginPath();
+            dt4.arc(rocketX - 45, rocketY, 10, 0, 2 * Math.PI);
+            dt4.stroke();
+            dt4.fill();
+            //spokes at the bottom of the rocket
+            //spoke 1
+            dt4.fillStyle = "yellow";
+            dt4.lineWidth = 4;
+            dt4.beginPath();
+            dt4.moveTo(rocketX - 130, rocketY - 20);
+            dt4.lineTo(rocketX - 150, rocketY - 30);
+            dt4.lineTo(rocketX - 145, rocketY - 15);
+            dt4.lineTo(rocketX - 95, rocketY - 7);
+            dt4.closePath();
+            dt4.stroke();
+            dt4.fill();
+            //stroke 2
+            dt4.beginPath();
+            dt4.moveTo(rocketX - 130, rocketY + 20);
+            dt4.lineTo(rocketX - 150, rocketY + 30);
+            dt4.lineTo(rocketX - 145, rocketY + 15);
+            dt4.lineTo(rocketX - 95, rocketY + 7);
+            dt4.closePath();
+            dt4.stroke();
+            dt4.fill();
+            //stroke 3
+            dt4.fillRect(rocketX - 150, rocketY - 5, 40, 10);
+            dt4.lineWidth = 2;
+            dt4.strokeRect(rocketX - 150, rocketY - 5, 40, 10);
+
+            //incrementing the speed of the rocket
+            rocketX = rocketX + speed1;
+
+                        //if the rocket hits one of the edges on the screen, it will reset to the leftmost x value of the canvas and a randomly generated y value
+			if(rocketX < 0 || rocketX > 750)
+			{
+				rocketX = 0;
+				rocketY = Math.floor(Math.random() * 200) + 1;
+			}
+        }
+
+//END OF CANVAS 4, BEGINNING OF CANVAS 5
+//**************************************
+//this is the canvas housing the astronaut
+
+//assigning x, y, and speed values
+        var astroX = 20;
+        var astroY = 100;
+        astroSpeedX = 2;
+        astroSpeedY = 2;
+        setInterval(astronaut, 50)
+        function astronaut()
+        {
+            //clearing the canvas for a cleaner animation
+            dt5.clearRect(0, 0, canvas5.width, canvas5.height);
+            //jetpack
+            dt5.fillStyle = astroColor;
+            dt5.fillRect(astroX - 40, astroY, 80, 75);
+
+            //helmet base
+            dt5.fillStyle = "light" + astroColor;
+            dt5.beginPath()
+            dt5.arc(astroX, astroY, 30, 0, 2 * Math.PI);
+            dt5.fill();
+
+            //jetpack buttons
+            //button 1
+            dt5.beginPath();
+            dt5.fillStyle = "black";
+            dt5.arc(astroX - 34, astroY + 10, 2, 0, 2 * Math.PI);
+            dt5.fill();
+            //button 2
+            dt5.beginPath();
+            dt5.fillStyle = "black";
+            dt5.arc(astroX + 34, astroY + 10, 2, 0, 2 * Math.PI);
+            dt5.fill();
+            //button 3
+            dt5.beginPath();
+            dt5.fillStyle = "black";
+            dt5.arc(astroX - 34, astroY + 70, 2, 0, 2 * Math.PI);
+            dt5.fill();
+            //button 4
+            dt5.beginPath();
+            dt5.fillStyle = "black";
+            dt5.arc(astroX + 34, astroY + 70, 2, 0, 2 * Math.PI);
+            dt5.fill();
+
+            //helmet glass
+            dt5.fillStyle = "black";
+            dt5.beginPath()
+            dt5.arc(astroX, astroY, 25, 0, 2 * Math.PI);
+            dt5.fill();
+
+            //body of astronaut
+            dt5.beginPath();
+            dt5.fillStyle = "light" + astroColor;
+            dt5.fillRect(astroX - 20, astroY + 30, 40, 50);
+
+            //neckpiece
+            dt5.beginPath();
+            dt5.fillStyle = "black";
+            dt5.moveTo(astroX - 10, astroY + 32);
+            dt5.bezierCurveTo(astroX - 20, astroY + 40, astroX + 20, astroY + 40, astroX + 10, astroY + 32);
+            dt5.fill();
+
+            //left arm
+            dt5.beginPath();
+            dt5.lineWidth = 10;
+            dt5.lineCap = "round";
+            dt5.strokeStyle = "light" + astroColor;
+            dt5.moveTo(astroX - 25, astroY + 40);
+            dt5.quadraticCurveTo(astroX - 45, astroY + 40, astroX - 40, astroY + 70);
+            dt5.stroke();
+
+            //right arm
+            dt5.beginPath();
+            dt5.lineWidth = 10;
+            dt5.lineCap = "round";
+            dt5.strokeStyle = "light" + astroColor;
+            dt5.moveTo(astroX + 25, astroY + 40);
+            dt5.quadraticCurveTo(astroX + 45, astroY + 40, astroX + 40, astroY + 70);
+            dt5.stroke();
+
+            //left shoulderpiece
+            dt5.beginPath();
+            dt5.fillStyle = "black";
+            dt5.moveTo(astroX - 20, astroY + 30);
+            dt5.lineTo(astroX - 20, astroY + 50);
+            dt5.lineTo(astroX - 30, astroY + 30);
+            dt5.closePath();
+            dt5.fill();
+
+            //right shoulderpiece
+            dt5.beginPath();
+            dt5.moveTo(astroX + 20, astroY + 30);
+            dt5.lineTo(astroX + 20, astroY + 50);
+            dt5.lineTo(astroX + 30, astroY + 30);
+            dt5.closePath();
+            dt5.fill();
+
+            //left leg
+            dt5.beginPath();
+            dt5.strokeStyle = "light" + astroColor;
+            dt5.lineWidth = 15;
+            dt5.moveTo(astroX - 10, astroY + 80);
+            dt5.lineTo(astroX - 20, astroY + 110);
+            dt5.stroke();
+
+            //right leg
+            dt5.beginPath();
+            dt5.strokeStyle = "light" + astroColor;
+            dt5.lineWidth = 15;
+            dt5.lineJoin = "round";
+            dt5.moveTo(astroX + 10, astroY + 80);
+            dt5.lineTo(astroX + 30, astroY + 90);
+            dt5.lineTo(astroX + 20, astroY + 110);
+            dt5.stroke();
+
+            //left moonboot
+            dt5.beginPath();
+            dt5.strokeStyle = astroColor;
+            dt5.moveTo(astroX - 20, astroY + 110);
+            dt5.lineTo(astroX - 15, astroY + 115);
+            dt5.stroke();
+
+            //right moonboot
+            dt5.beginPath();
+            dt5.strokeStyle = astroColor;
+            dt5.moveTo(astroX + 20, astroY + 110);
+            dt5.lineTo(astroX + 25, astroY + 115);
+            dt5.stroke();
+
+            //monitor on body of astronaut
+            dt5.beginPath();
+            dt5.fillStyle = "black";
+            dt5.fillRect(astroX - 15, astroY + 40, 30, 20);
+            dt5.fill();
+
+            //incrementing the x and y values with the speed
+            astroX = astroX + astroSpeedX;
+            astroY = astroY + astroSpeedY;
+
+            //if the astronaut hits any of the edges of the canvas, they will bounce and essentially the x and y values will go the opposite direction
+            if(astroY > 470)
+            {
+                astroSpeedY = -astroSpeedY;
+            }
+            else if(astroY < 0)
+            {
+                astroSpeedY = -astroSpeedY;
+            }
+            else if(astroX < 0)
+            {
+                astroSpeedX = -astroSpeedX;
+            }
+            else if(astroX > 630)
+            {
+                astroSpeedX = -astroSpeedX;
+            }
+        }
+
+        //this event listener is looking out for double clicks. When it detects that, it wll call the function changeAstroColour
+        document.addEventListener("dblclick", changeAstroColour)
+        function changeAstroColour()
+        {
+           //this code block changes the color of the floating astronaut
+           astroColor = prompt("What colour do you want your first astronaut to be? Choose from: Blue, Cyan, SeaGreen, Salmon, Grey, Pink, Green, Yellow, and SlateGrey");
+        }
+
+//END OF CANVAS 5, BEGINNING OF CANVAS 6
+//**************************************
+//this writes the name of the user along with planet so it labels the scene as their planet.
+//30PT Comic Sans MS is used
+        dt6.font = "30pt Comic Sans MS";
+        dt6.fillStyle = "white";
+        dt6.fillText(astroPlanetName, 180, 460);
+
+</script>
+</body>
+</html>
